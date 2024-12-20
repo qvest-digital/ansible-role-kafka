@@ -1,0 +1,164 @@
+---
+argument_specs:
+  main:
+    short_description: Main entrypoint for the Kafka role.
+    description:
+      - This is the main entrypoint for the Kafka role.
+      - It installs Apache Kafka on the target node.
+    author:
+      - Benjamin P. Jung
+    options:
+      kafka_state:
+        description: Desired state of the Kafka node installation
+        type: str
+        choices:
+          - present
+          - absent
+        default: present
+      kafka_version:
+        description: Version of Apache Kafka to Install
+        type: str
+      kafka_scala_version:
+        description: Scala version used to build the distribution of Kafka to install
+        type: str
+      kafka_package_checksum:
+        description: Checksums of the Kafka package to be installed
+        type: str
+        required: false
+      kafka_console_log_output:
+        description: Where to output the console log messages
+        type: str
+        choices:
+          - stdout
+          - stderr
+          - disabled
+        default: stderr
+      kafka_server_log_dirs:
+        description: List of directories to store Kafka logs
+        type: list
+        elements: str
+        required: true
+      kafka_broker_listen_address:
+        description: Address to listen on for Kafka controller
+        type: str
+        required: false
+      kafka_broker_advertised_listen_address:
+        description: Address to advertise for Kafka controller
+        type: str
+        required: true
+      kafka_controller_listen_address:
+        description: Address to listen on for Kafka controller
+        type: str
+        required: false
+      kafka_controllers:
+        description: List of Kafka controller nodes
+        type: list
+        elements: dict
+        options:
+          node_id:
+            description: Unique identifier for the Kafka controller node
+            type: int
+            required: true
+          host:
+            description: Hostname or IP address of the Kafka controller node
+            type: str
+            required: true
+          port:
+            description: Port of the Kafka controller node
+            type: int
+            required: false
+      kafka_java_home:
+        description: Home of the Java runtime used to run Kafka, defaults to the system default if unset
+        type: str
+        required: false
+      kafka_memory_initial_heap_size:
+        type: str
+        required: true
+      kafka_memory_maximum_heap_size:
+        type: str
+        required: true
+      kafka_system_group_name:
+        description: Name of the POSIX system group to be used
+        type: str
+        default: kafka
+      kafka_system_user_name:
+        description: Name of the POSIX system user to be used
+        type: str
+        default: kafka
+      kafka_cluster_id:
+        description: Unique identifier for the Kafka cluster
+        type: str
+        required: true
+      kafka_server_process_roles:
+        description: List of roles for Kafka server processes to assume
+        type: list
+        elements: str
+        default:
+          - broker
+          - controller
+      kafka_server_log_cleaner_enable:
+        type: bool
+        required: false
+      kafka_server_log_cleaner_threads:
+        type: int
+        required: false
+      kafka_server_log_cleanup_policy:
+        type: list
+        elements: str
+        default:
+          - compact
+          - delete
+      kafka_server_ssl_enabled_protocols:
+        description: List of SSL/TLS protocols to enable for Kafka server
+        type: list
+        elements: str
+        default:
+          - TLSv1.2
+          - TLSv1.3
+      kafka_server_socket_send_buffer_bytes:
+        type: int
+        required: false
+      kafka_server_socket_receive_buffer_bytes:
+        type: int
+        required: false
+      kafka_server_transaction_state_log_min_isr:
+        type: int
+        required: false
+      kafka_server_socket_request_max_bytes:
+        type: int
+        required: false
+      kafka_server_broker_rack:
+        type: str
+        required: false
+      kafka_server_broker_id_generation_enable:
+        type: bool
+        required: false
+      kafka_server_broker_session_timeout_ms:
+        type: int
+        required: false
+      kafka_server_num_partitions:
+        type: int
+        default: 1
+      kafka_server_num_network_threads:
+        type: int
+        default: 3
+      kafka_server_num_io_threads:
+        type: int
+        default: 8
+      kafka_server_auto_create_topics_enable:
+        type: bool
+        required: false
+      kafka_server_delete_topic_enable:
+        type: bool
+        required: false
+      kafka_log4j_root_level:
+        description: Root log level
+        type: str
+        choices:
+          - FATAL
+          - ERROR
+          - WARN
+          - INFO
+          - DEBUG
+          - TRACE
+        default: INFO

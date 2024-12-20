@@ -1,0 +1,88 @@
+process.roles={{ kafka_server_process_roles | join(',') }}
+node.id={{ kafka_server_node_id }}
+{% if kafka_server_broker_rack is defined and kafka_server_broker_rack != '' %}
+broker.rack={{ kafka_server_broker_rack }}
+{% endif %}
+{% if kafka_server_broker_id_generation_enable is defined %}
+broker.id.generation.enable={{ kafka_server_broker_id_generation_enable }}
+{% endif %}
+{% if kafka_server_broker_session_timeout_ms is defined %}
+broker.session.timeout.ms={{ kafka_server_broker_session_timeout_ms }}
+{% endif %}
+controller.quorum.voters={% for node in kafka_controllers %}
+{{ node.node_id }}@{{ node.host }}:{{ node.port | default(kafka_port_control_plane_default) }}{% if not loop.last %},{% endif %}
+{% endfor %}
+
+listeners={{ (([ kafka_listener_broker ] if 'broker' in kafka_server_process_roles else []) + ([ kafka_listener_controller ] if 'controller' in kafka_server_process_roles else [])) | join(',') }}
+inter.broker.listener.name=PLAINTEXT
+
+advertised.listeners={% if "broker" in kafka_server_process_roles %}PLAINTEXT://{{ kafka_broker_advertised_listen_address }}{% endif %}
+
+controller.listener.names=CONTROLLER
+
+listener.security.protocol.map=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
+{% if kafka_server_num_network_threads is defined %}
+num.network.threads={{ kafka_server_num_network_threads }}
+{% endif %}
+{% if kafka_server_num_io_threads is defined %}
+num.io.threads={{ kafka_server_num_io_threads }}
+{% endif %}
+{% if kafka_server_socket_send_buffer_bytes is defined %}
+socket.send.buffer.bytes={{ kafka_server_socket_send_buffer_bytes }}
+{% endif %}
+{% if kafka_server_socket_receive_buffer_bytes is defined %}
+socket.receive.buffer.bytes={{ kafka_server_socket_receive_buffer_bytes }}
+{% endif %}
+{% if kafka_server_socket_request_max_bytes is defined %}
+socket.request.max.bytes={{ kafka_server_socket_request_max_bytes }}
+{% endif %}
+log.dirs={{ kafka_server_log_dirs | join(',') }}
+{% if kafka_server_num_partitions is defined %}
+num.partitions={{ kafka_server_num_partitions }}
+{% endif %}
+{% if kafka_server_num_recovery_threads_per_data_dir is defined %}
+num.recovery.threads.per.data.dir={{ kafka_server_num_recovery_threads_per_data_dir }}
+{% endif %}
+
+{% if kafka_server_log_cleaner_enable is defined %}
+log.cleaner.enable={{ kafka_server_log_cleaner_enable }}
+{% endif %}
+{% if kafka_server_log_cleaner_threads is defined %}
+log.cleaner.threads={{ kafka_server_log_cleaner_threads }}
+{% endif %}
+{% if kafka_server_log_cleanup_policy is defined and (kafka_server_log_cleanup_policy | length) > 0 %}
+log.cleanup.policy={{ kafka_server_log_cleanup_policy | join(',') }}
+{% endif %}
+{% if kafka_server_delete_topic_enable is defined %}
+delete.topic.enable={{ kafka_server_delete_topic_enable }}
+{% endif %}
+{% if kafka_server_auto_create_topics_enable is defined %}
+auto.create.topics.enable={{ kafka_server_auto_create_topics_enable }}
+{% endif %}
+{% if kafka_server_offsets_topic_replication_factor is defined %}
+offsets.topic.replication.factor={{ kafka_server_offsets_topic_replication_factor }}
+{% endif %}
+{% if kafka_server_transaction_state_log_replication_factor is defined %}
+transaction.state.log.replication.factor={{ kafka_server_transaction_state_log_replication_factor }}
+{% endif %}
+{% if kafka_server_transaction_state_log_min_isr is defined %}
+transaction.state.log.min.isr={{ kafka_server_transaction_state_log_min_isr }}
+{% endif %}
+{% if kafka_server_ssl_enabled_protocols is defined %}
+ssl.enabled.protocols={{ kafka_server_ssl_enabled_protocols | join(',') }}
+{% endif %}
+{% if kafka_server_log_flush_interval_messages is defined %}
+log.flush.interval.messages={{ kafka_server_log_flush_interval_messages }}
+{% endif %}
+{% if kafka_server_log_flush_interval_ms is defined %}
+log.flush.interval.ms={{ kafka_server_log_flush_interval_ms }}
+{% endif %}
+{% if kafka_server_log_retention_hours is defined %}
+log.retention.hours={{ kafka_server_log_retention_hours }}
+{% endif %}
+{% if kafka_server_log_segment_bytes is defined %}
+log.segment.bytes={{ kafka_server_log_segment_bytes }}
+{% endif %}
+{% if kafka_server_log_retention_check_interval_ms is defined %}
+log.retention.check.interval.ms={{ kafka_server_log_retention_check_interval_ms }}
+{% endif %}
