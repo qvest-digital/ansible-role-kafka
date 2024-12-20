@@ -10,9 +10,9 @@ kafka_config_dir_path: "/etc/kafka"
 
 # Default / fallback values
 # See: https://developer.confluent.io/faq/apache-kafka/kafka-operations/
-kafka_port_clients_default: 9092
-kafka_port_control_plane_default: 9093
-kafka_port_connect_default: 8083
-kafka_port_schema_registry_default: 8081
-kafka_port_rest_proxy_default: 8082
-kafka_port_ksqldb_default: 8088
+kafka_port_clients_default: '9092'
+kafka_port_control_plane_default: '9093'
+kafka_port_connect_default: '8083'
+kafka_port_schema_registry_default: '8081'
+kafka_port_rest_proxy_default: '8082'
+kafka_port_ksqldb_default: '8088'
