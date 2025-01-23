@@ -67,6 +67,14 @@ argument_specs:
             description: Port of the Kafka controller node
             type: int
             required: false
+      kafka_net_prefer_ipv4_stack:
+        description: |
+          Prefer IPv4 stack over IPv6 stack.
+          This is useful when the system has both IPv4 and IPv6 stacks enabled.
+          Internally, `-Djava.net.preferIPv4Stack=true` will be set, if this value
+          is set to `true`.
+        type: bool
+        required: true
       kafka_java_home:
         description: Home of the Java runtime used to run Kafka, defaults to the system default if unset
         type: str
