@@ -56,7 +56,7 @@ argument_specs:
         elements: dict
         options:
           node_id:
-            description: Unique identifier for the Kafka controller node
+            description: The node ID associated with the roles this process is playing
             type: int
             required: true
           host:
@@ -151,6 +151,9 @@ argument_specs:
         type: int
         default: 3
       kafka_server_num_io_threads:
+        description: |
+          The number of threads that the server uses for processing requests,
+          which may include disk I/O
         type: int
         default: 8
       kafka_server_auto_create_topics_enable:
@@ -163,6 +166,8 @@ argument_specs:
         type: bool
         required: false
       kafka_server_background_threads:
+        description: The number of threads to use for various background processing tasks
+
         type: int
         required: false
       kafka_server_compression_type:
@@ -179,6 +184,14 @@ argument_specs:
         - snappy
         - lz4
         - zstd
+        required: false
+      kafka_server_eligible_leader_replicas_enable:
+        description: Enable the Eligible leader replicas
+        type: bool
+        required: false
+      kafka_server_sasl_mechanism_controller_protocol:
+        description: SASL mechanism used for communication with controllers. Default is GSSAPI.
+        type: str
         required: false
       kafka_log4j_root_level:
         description: Root log level
