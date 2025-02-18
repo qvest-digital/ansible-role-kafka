@@ -10,11 +10,12 @@ kafka_scala_version: '2.13'
 
 # kafka_java_home: /usr/local/lib/jvm/custom-java-runtime
 
+kafka_server_client_dns_lookup: use_all_dns_ips
+
 kafka_memory_initial_heap_size: '1G'
 kafka_memory_maximum_heap_size: '1G'
 
 kafka_broker_listen_address: ':9092'
-kafka_broker_advertised_listen_address: 'localhost:9092'
 kafka_controller_listen_address: ':9093'
 
 kafka_console_log_output: 'stderr'
@@ -66,6 +67,10 @@ kafka_server_ssl_enabled_protocols:
   - TLSv1.2
   - TLSv1.3
 
+kafka_server_sasl_enabled_mechanisms:
+  - GSSAPI
+kafka_server_sasl_mechanism_inter_broker_protocol:
+  - GSSAPI
 kafka_server_sasl_mechanism_controller_protocol: GSSAPI
 
 kafka_server_background_threads: 10

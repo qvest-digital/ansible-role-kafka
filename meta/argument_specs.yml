@@ -38,14 +38,22 @@ argument_specs:
         type: list
         elements: str
         required: true
+      kafka_server_sasl_enabled_mechanisms:
+        description: |
+          The list of SASL mechanisms enabled in the Kafka server.
+          The list may contain any mechanism for which a security provider is available.
+          Only GSSAPI is enabled by default.
+        type: list
+        elements: str
+        required: false
+      kafka_server_sasl_mechanism_inter_broker_protocol:
+        type: list
+        elements: str
+        required: false
       kafka_broker_listen_address:
         description: Address to listen on for Kafka controller
         type: str
         required: false
-      kafka_broker_advertised_listen_address:
-        description: Address to advertise for Kafka controller
-        type: str
-        required: true
       kafka_controller_listen_address:
         description: Address to listen on for Kafka controller
         type: str
@@ -97,6 +105,22 @@ argument_specs:
         description: Unique identifier for the Kafka cluster
         type: str
         required: true
+      kafka_server_client_dns_lookup:
+        description: |
+          Controls how the client uses DNS lookups.
+          If set to use_all_dns_ips, connect to each returned IP address in sequence
+          until a successful connection is established. After a disconnection, the
+          next IP is used. Once all IPs have been used once, the client resolves the
+          IP(s) from the hostname again (both the JVM and the OS cache DNS name
+          lookups, however).
+          If set to resolve_canonical_bootstrap_servers_only, resolve each bootstrap
+          address into a list of canonical names. After the bootstrap phase, this
+          behaves the same as use_all_dns_ips.
+        type: str
+        choices:
+          - use_all_dns_ips
+          - resolve_canonical_bootstrap_servers_only
+        required: false
       kafka_server_process_roles:
         description: List of roles for Kafka server processes to assume
         type: list
@@ -163,6 +187,12 @@ argument_specs:
         type: bool
         required: false
       kafka_server_auto_leader_rebalance_enable:
+        description: |
+          Enables auto leader balancing.
+          A background thread checks the distribution of partition leaders at regular intervals,
+          configurable by leader.imbalance.check.interval.seconds.
+          If the leader imbalance exceeds leader.imbalance.per.broker.percentage,
+          leader rebalance to the preferred leader for partitions is triggered.
         type: bool
         required: false
       kafka_server_background_threads:

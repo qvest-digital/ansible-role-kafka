@@ -103,3 +103,12 @@ log.retention.check.interval.ms={{ kafka_server_log_retention_check_interval_ms 
 {% if kafka_server_sasl_mechanism_controller_protocol is defined %}
 sasl.mechanism.controller.protocol={{ kafka_server_sasl_mechanism_controller_protocol }}
 {% endif %}
+{% if kafka_server_sasl_mechanism_inter_broker_protocol %}
+sasl.mechanism.inter.broker.protocol={{ kafka_server_sasl_mechanism_inter_broker_protocol | join(',') }}
+{% endif %}
+{% if kafka_server_sasl_enabled_mechanisms is defined %}
+sasl.enabled.mechanisms={{ kafka_server_sasl_enabled_mechanisms | join(',') }}
+{% endif %}
+{% if kafka_server_client_dns_lookup is defined %}
+client.dns.lookup={{ kafka_server_client_dns_lookup }}
+{% endif %}
