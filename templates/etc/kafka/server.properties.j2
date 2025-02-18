@@ -57,6 +57,19 @@ delete.topic.enable={{ kafka_server_delete_topic_enable }}
 {% if kafka_server_auto_create_topics_enable is defined %}
 auto.create.topics.enable={{ kafka_server_auto_create_topics_enable }}
 {% endif %}
+{% if kafka_server_auto_leader_rebalance_enable is defined %}
+auto.leader.rebalance.enable={{ kafka_server_auto_leader_rebalance_enable }}
+{% endif %}
+{% if kafka_server_background_threads is defined %}
+background.threads={{ kafka_server_background_threads }}
+{% endif %}
+{% if kafka_server_background_thread_interval_ms is defined %}
+{% endif %}
+{% if kafka_server_compression_type is defined %}
+compression.type={{ kafka_server_compression_type }}
+{% endif %}
+{% if kafka_server_log_cleaner_dedupe_buffer_size is defined %}
+{% endif %}
 {% if kafka_server_offsets_topic_replication_factor is defined %}
 offsets.topic.replication.factor={{ kafka_server_offsets_topic_replication_factor }}
 {% endif %}

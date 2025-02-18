@@ -159,6 +159,27 @@ argument_specs:
       kafka_server_delete_topic_enable:
         type: bool
         required: false
+      kafka_server_auto_leader_rebalance_enable:
+        type: bool
+        required: false
+      kafka_server_background_threads:
+        type: int
+        required: false
+      kafka_server_compression_type:
+        description: |
+          Specify the final compression type for a given topic.
+          This configuration accepts the standard compression codecs ('gzip', 'snappy', 'lz4', 'zstd').
+          It additionally accepts 'uncompressed' which is equivalent to no compression;
+          and 'producer' which means retain the original compression codec set by the producer.
+        type: str
+        choices:
+        - uncompressed
+        - producer
+        - gzip
+        - snappy
+        - lz4
+        - zstd
+        required: false
       kafka_log4j_root_level:
         description: Root log level
         type: str

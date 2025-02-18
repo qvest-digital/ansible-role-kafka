@@ -84,6 +84,12 @@
       - (kafka_server_log_cleanup_policy | length) > 0
   when: kafka_server_log_cleanup_policy is defined
 
+- name: asserts | Option kafka_server_background_threads
+  ansible.builtin.assert:
+    that:
+      - kafka_server_background_threads > 0
+  when: kafka_server_background_threads is defined
+
 - name: asserts | Option kafka_server_log_cleanup_policy (enum values)
   ansible.builtin.assert:
     that:
