@@ -15,9 +15,6 @@ kafka_server_client_dns_lookup: use_all_dns_ips
 kafka_memory_initial_heap_size: '1G'
 kafka_memory_maximum_heap_size: '1G'
 
-kafka_broker_listen_address: ':9092'
-kafka_controller_listen_address: ':9093'
-
 kafka_console_log_output: 'stderr'
 
 # Best to be generated with `kafka-storage.sh random-uuid`
@@ -25,9 +22,46 @@ kafka_console_log_output: 'stderr'
 # or leave an existing cluster ID unchanged.
 kafka_cluster_id: 'my-kafka-cluster'
 
-kafka_controllers:
+kafka_sasl_broker_username: admin
+kafka_sasl_broker_password: admin-secret
+
+kafka_sasl_users:
+  - username: alice
+    password: changeme
+  - username: bon
+    password: notasecret
+
+kafka_controller_listeners:
+  - name: CONTROLLER
+    host: localhost
+    port: 9093
+    is_control_plane_listener: true
+    ssl:
+      enabled: false
+    sasl:
+      enabled: false
+      plain: true
+      scram_sha_256: true
+
+kafka_broker_listeners:
+  - name: BROKER
+    host: localhost
+    port: 9092
+    advertise: true
+    is_inter_broker_listener: true
+    ssl:
+      enabled: false
+    sasl:
+      enabled: false
+      plain: true
+      scram_sha_256: true
+
+# If kafka_server_process_roles contains 'controller', this
+# specifies the list of Kafka controllers in the cluster to connect to.
+kafka_controller_quorum_voters:
   - node_id: 1
     host: localhost
+    port: 9093
 
 kafka_system_group_name: kafka
 kafka_system_user_name: kafka
@@ -69,8 +103,9 @@ kafka_server_ssl_enabled_protocols:
 
 kafka_server_sasl_enabled_mechanisms:
   - GSSAPI
-kafka_server_sasl_mechanism_inter_broker_protocol:
-  - GSSAPI
+  - PLAIN
+
+kafka_server_sasl_mechanism_inter_broker_protocol: GSSAPI
 kafka_server_sasl_mechanism_controller_protocol: GSSAPI
 
 kafka_server_background_threads: 10

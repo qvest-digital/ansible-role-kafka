@@ -15,6 +15,93 @@ argument_specs:
           - present
           - absent
         default: present
+      kafka_controller_listeners:
+        type: list
+        elements: dict
+        options:
+          name:
+            type: str
+            required: true
+          host:
+            type: str
+            default: ''
+          port:
+            type: int
+            required: true
+          is_control_plane_listener:
+            type: bool
+            required: false
+          ssl:
+            type: dict
+            options:
+              enabled:
+                type: bool
+                required: true
+            default:
+              enabled: false
+          sasl:
+            type: dict
+            options:
+              enabled:
+                type: bool
+                required: true
+              plain:
+                type: bool
+                default: true
+              scram_sha_256:
+                type: bool
+                default: false
+              scram_sha_512:
+                type: bool
+                default: false
+            default:
+              enabled: false
+        default: []
+      kafka_broker_listeners:
+        type: list
+        elements: dict
+        options:
+          name:
+            type: str
+            required: true
+          host:
+            type: str
+            default: ''
+          port:
+            type: int
+            required: true
+          ssl:
+            type: dict
+            options:
+              enabled:
+                type: bool
+                required: true
+            default:
+              enabled: false
+          sasl:
+            type: dict
+            options:
+              enabled:
+                type: bool
+                required: true
+              plain:
+                type: bool
+                default: true
+              scram_sha_256:
+                type: bool
+                default: false
+              scram_sha_512:
+                type: bool
+                default: false
+            default:
+              enabled: false
+          is_inter_broker_listener:
+            type: bool
+            required: true
+          advertise:
+            type: bool
+            required: true
+        default: []
       kafka_version:
         description: Version of Apache Kafka to Install
         type: str
@@ -47,18 +134,9 @@ argument_specs:
         elements: str
         required: false
       kafka_server_sasl_mechanism_inter_broker_protocol:
-        type: list
-        elements: str
-        required: false
-      kafka_broker_listen_address:
-        description: Address to listen on for Kafka controller
         type: str
         required: false
-      kafka_controller_listen_address:
-        description: Address to listen on for Kafka controller
-        type: str
-        required: false
-      kafka_controllers:
+      kafka_controller_quorum_voters:
         description: List of Kafka controller nodes
         type: list
         elements: dict
@@ -75,6 +153,7 @@ argument_specs:
             description: Port of the Kafka controller node
             type: int
             required: false
+        required: false
       kafka_net_prefer_ipv4_stack:
         description: |
           Prefer IPv4 stack over IPv6 stack.
