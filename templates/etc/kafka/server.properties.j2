@@ -12,7 +12,11 @@ broker.session.timeout.ms={{ kafka_server_broker_session_timeout_ms }}
 
 {% if kafka_controller_quorum_voters is defined %}
 controller.quorum.voters={% for node in kafka_controller_quorum_voters %}
-{{ node.node_id }}@{{ node.host }}:{{ node.port | default(kafka_port_control_plane_default) }}{% if not loop.last %},{% endif %}
+{{ node.node_id }}@{{ node.host }}:{{ node.port | default(kafka_port_client_default) }}{% if not loop.last %},{% endif %}
+{% endfor %}
+
+controller.quorum.bootstrap.servers={% for node in kafka_controller_quorum_voters %}
+{{ node.host }}:{{ node.port | default(kafka_port_clients_default) }}{% if not loop.last %},{% endif %}
 {% endfor %}
 {% endif %}
 
@@ -20,9 +24,11 @@ listeners={% for l in kafka_broker_listeners + kafka_controller_listeners %}
 {{ l.name }}://{{ l.host }}:{{ l.port }}{% if not loop.last %},{% endif %}
 {% endfor %}
 
+{% if (kafka_broker_listeners | selectattr("advertise", "equalto", true)) | length > 0 %}
 advertised.listeners={% for l in (kafka_broker_listeners | selectattr("advertise", "equalto", true)) %}
 {{ l.name }}://{{ l.host }}:{{ l.port }}{% if not loop.last %},{% endif %}
 {% endfor %}
+{% endif %}
 
 inter.broker.listener.name={{ (kafka_broker_listeners | selectattr("is_inter_broker_listener", "equalto", true) | first).name }}
 
@@ -36,10 +42,10 @@ listener.security.protocol.map={% for l in kafka_broker_listeners + kafka_contro
 {{ l.name }}:{{ l.ssl.enabled | ternary(l.sasl.enabled | ternary ('SASL_SSL', 'SSL'), l.sasl.enabled | ternary('SASL_PLAINTEXT', 'PLAINTEXT')) }}{% if not loop.last %},{% endif %}
 {% endfor %}
 
-{% for l in (kafka_broker_listeners + kafka_controller_listeners) | selectattr("sasl.enabled", "equalto", true) %}
+{% for l in (kafka_broker_listeners + kafka_controller_listeners) | selectattr("sasl.enabled", "equalto", true) | selectattr("sasl.plain", "equalto", true) %}
 listener.name.{{ l.name | lower }}.plain.sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required \
-  username="username" \
-  password="password";
+  username="{{ kafka_sasl_broker_username }}" \
+  password="{{ kafka_sasl_broker_password }}";
 {% endfor %}
 
 {% if kafka_server_num_network_threads is defined %}
